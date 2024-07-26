@@ -39,8 +39,8 @@ resource "openstack_networking_router_interface_v2" "rke2_router_interface" {
 resource "openstack_compute_instance_v2" "masters_instance" {
   count = var.masters_count
   name         = "${var.cluster_name}-master-${format("%03d", count.index + 1)}"
-  image_name      = "Ubuntu 22.04 LTS"
-  flavor_name       = "eo1.large"
+  image_name      = var.vm_image
+  flavor_name       = var.masters_flavor
   key_pair        = var.ssh_keypair_name
   network {
     port = openstack_networking_port_v2.masters_port[count.index].id
@@ -63,8 +63,8 @@ resource "openstack_compute_instance_v2" "masters_instance" {
 resource "openstack_compute_instance_v2" "workers_instance" {
   count = var.workers_count
   name         = "${var.cluster_name}-worker-${format("%03d", count.index + 1)}"
-  image_name      = "Ubuntu 22.04 LTS"
-  flavor_name       = "eo1.large"
+  image_name      = var.vm_image
+  flavor_name       = var.workers_flavor
   key_pair        = var.ssh_keypair_name
   network {
     port = openstack_networking_port_v2.workers_port[count.index].id
